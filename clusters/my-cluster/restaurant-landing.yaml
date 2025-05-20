@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: restaurant-landing-page
+  namespace: default
   labels:
     app: restaurant-landing-page
 spec:
