@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: restaurant-landing
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: restaurant-landing
+  template:
+    metadata:
+      labels:
+        app: restaurant-landing
+    spec:
+      containers:
+        - name: restaurant
+          image: ghcr.io/vedastuss/restaurant-landing-page:latest
+          ports:
+            - containerPort: 80
