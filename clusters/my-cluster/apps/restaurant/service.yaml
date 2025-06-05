@@ -3,10 +3,12 @@ kind: Service
 metadata:
   name: restaurant-landing
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     app: restaurant-landing
   ports:
     - protocol: TCP
       port: 80
       targetPort: 80
+      nodePort: 30080
+
