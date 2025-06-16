@@ -1,0 +1,192 @@
+{
+    "apiVersion": "kustomize.toolkit.fluxcd.io/v1",
+    "kind": "Kustomization",
+    "metadata": {
+        "annotations": {
+            "reconcile.fluxcd.io/requestedAt": "2025-06-05T01:42:24.573159744Z"
+        },
+        "creationTimestamp": "2025-05-14T02:50:21Z",
+        "deletionGracePeriodSeconds": 0,
+        "deletionTimestamp": "2025-06-05T04:02:06Z",
+        "finalizers": [],
+        "generation": 2,
+        "labels": {
+            "kustomize.toolkit.fluxcd.io/name": "flux-system",
+            "kustomize.toolkit.fluxcd.io/namespace": "flux-system"
+        },
+        "name": "flux-system",
+        "namespace": "flux-system",
+        "resourceVersion": "7318911",
+        "uid": "c46f88ab-bd30-491a-ab5e-4b3b7520b3fd"
+    },
+    "spec": {
+        "force": false,
+        "interval": "10m0s",
+        "path": "./clusters/staging",
+        "prune": true,
+        "sourceRef": {
+            "kind": "GitRepository",
+            "name": "flux-system"
+        }
+    },
+    "status": {
+        "conditions": [
+            {
+                "lastTransitionTime": "2025-06-05T03:57:33Z",
+                "message": "Fetching manifests for revision master@sha1:d9df323bc1ad9250ab7216ac201da0ae15c9caac with a timeout of 9m30s",
+                "observedGeneration": 1,
+                "reason": "ProgressingWithRetry",
+                "status": "True",
+                "type": "Reconciling"
+            },
+            {
+                "lastTransitionTime": "2025-06-05T03:57:33Z",
+                "message": "kustomization path not found: stat /tmp/kustomization-2264177542/clusters/staging: no such file or directory",
+                "observedGeneration": 1,
+                "reason": "ArtifactFailed",
+                "status": "False",
+                "type": "Ready"
+            }
+        ],
+        "inventory": {
+            "entries": [
+                {
+                    "id": "_alerts.notification.toolkit.fluxcd.io_apiextensions.k8s.io_CustomResourceDefinition",
+                    "v": "v1"
+                },
+                {
+                    "id": "_buckets.source.toolkit.fluxcd.io_apiextensions.k8s.io_CustomResourceDefinition",
+                    "v": "v1"
+                },
+                {
+                    "id": "_gitrepositories.source.toolkit.fluxcd.io_apiextensions.k8s.io_CustomResourceDefinition",
+                    "v": "v1"
+                },
+                {
+                    "id": "_helmcharts.source.toolkit.fluxcd.io_apiextensions.k8s.io_CustomResourceDefinition",
+                    "v": "v1"
+                },
+                {
+                    "id": "_helmreleases.helm.toolkit.fluxcd.io_apiextensions.k8s.io_CustomResourceDefinition",
+                    "v": "v1"
+                },
+                {
+                    "id": "_helmrepositories.source.toolkit.fluxcd.io_apiextensions.k8s.io_CustomResourceDefinition",
+                    "v": "v1"
+                },
+                {
+                    "id": "_kustomizations.kustomize.toolkit.fluxcd.io_apiextensions.k8s.io_CustomResourceDefinition",
+                    "v": "v1"
+                },
+                {
+                    "id": "_ocirepositories.source.toolkit.fluxcd.io_apiextensions.k8s.io_CustomResourceDefinition",
+                    "v": "v1"
+                },
+                {
+                    "id": "_providers.notification.toolkit.fluxcd.io_apiextensions.k8s.io_CustomResourceDefinition",
+                    "v": "v1"
+                },
+                {
+                    "id": "_receivers.notification.toolkit.fluxcd.io_apiextensions.k8s.io_CustomResourceDefinition",
+                    "v": "v1"
+                },
+                {
+                    "id": "_flux-system__Namespace",
+                    "v": "v1"
+                },
+                {
+                    "id": "flux-system_critical-pods-flux-system__ResourceQuota",
+                    "v": "v1"
+                },
+                {
+                    "id": "flux-system_helm-controller__ServiceAccount",
+                    "v": "v1"
+                },
+                {
+                    "id": "flux-system_kustomize-controller__ServiceAccount",
+                    "v": "v1"
+                },
+                {
+                    "id": "flux-system_notification-controller__ServiceAccount",
+                    "v": "v1"
+                },
+                {
+                    "id": "flux-system_source-controller__ServiceAccount",
+                    "v": "v1"
+                },
+                {
+                    "id": "_crd-controller-flux-system_rbac.authorization.k8s.io_ClusterRole",
+                    "v": "v1"
+                },
+                {
+                    "id": "_flux-edit-flux-system_rbac.authorization.k8s.io_ClusterRole",
+                    "v": "v1"
+                },
+                {
+                    "id": "_flux-view-flux-system_rbac.authorization.k8s.io_ClusterRole",
+                    "v": "v1"
+                },
+                {
+                    "id": "_cluster-reconciler-flux-system_rbac.authorization.k8s.io_ClusterRoleBinding",
+                    "v": "v1"
+                },
+                {
+                    "id": "_crd-controller-flux-system_rbac.authorization.k8s.io_ClusterRoleBinding",
+                    "v": "v1"
+                },
+                {
+                    "id": "flux-system_notification-controller__Service",
+                    "v": "v1"
+                },
+                {
+                    "id": "flux-system_source-controller__Service",
+                    "v": "v1"
+                },
+                {
+                    "id": "flux-system_webhook-receiver__Service",
+                    "v": "v1"
+                },
+                {
+                    "id": "flux-system_helm-controller_apps_Deployment",
+                    "v": "v1"
+                },
+                {
+                    "id": "flux-system_kustomize-controller_apps_Deployment",
+                    "v": "v1"
+                },
+                {
+                    "id": "flux-system_notification-controller_apps_Deployment",
+                    "v": "v1"
+                },
+                {
+                    "id": "flux-system_source-controller_apps_Deployment",
+                    "v": "v1"
+                },
+                {
+                    "id": "flux-system_flux-system_kustomize.toolkit.fluxcd.io_Kustomization",
+                    "v": "v1"
+                },
+                {
+                    "id": "flux-system_allow-egress_networking.k8s.io_NetworkPolicy",
+                    "v": "v1"
+                },
+                {
+                    "id": "flux-system_allow-scraping_networking.k8s.io_NetworkPolicy",
+                    "v": "v1"
+                },
+                {
+                    "id": "flux-system_allow-webhooks_networking.k8s.io_NetworkPolicy",
+                    "v": "v1"
+                },
+                {
+                    "id": "flux-system_flux-system_source.toolkit.fluxcd.io_GitRepository",
+                    "v": "v1"
+                }
+            ]
+        },
+        "lastAppliedRevision": "master@sha1:4c2ec90b911002d4da38d8fd946949529cda75bd",
+        "lastAttemptedRevision": "master@sha1:4c2ec90b911002d4da38d8fd946949529cda75bd",
+        "lastHandledReconcileAt": "2025-06-05T01:42:24.573159744Z",
+        "observedGeneration": 1
+    }
+}
