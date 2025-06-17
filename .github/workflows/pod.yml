@@ -1,46 +1,50 @@
-name: Restart Restaurant App
+name: Delete Pod on Push to Master
 
 on:
   push:
     branches:
-      - master  # or use 'master' if that's your branch
+      - master  # or 'main' if that's your default branch
 
 jobs:
-  restart-pod:
+  delete-pod:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+    - name: Checkout Code
+      uses: actions/checkout@v4
 
-      - name: Set up kubectl
-        uses: azure/setup-kubectl@v3
-        with:
-          version: 'latest'
+    - name: Set up kubeconfig
+      run: |
+        mkdir -p $HOME/.kube
+        echo "$K8S_CA" | base64 -d > $HOME/.kube/ca.crt
 
-      - name: Configure Kubeconfig
-        run: |
-          mkdir -p $HOME/.kube
-          echo "$K8S_CA" | base64 -d > $HOME/.kube/ca.crt
-          cat <<EOF > $HOME/.kube/config
-          apiVersion: v1
-          kind: Config
-          clusters:
-          - name: cluster
-            cluster:
-              server: $K8S_SERVER
-              certificate-authority: $HOME/.kube/ca.crt
-          contexts:
-          - name: default
-            context:
-              cluster: cluster
-              user: deployer
-          current-context: default
-          users:
-          - name: deployer
-            user:
-              token: $K8S_TOKEN
-          EOF
+        cat <<EOF > $HOME/.kube/config
+        apiVersion: v1
+        kind: Config
+        clusters:
+        - name: cluster
+          cluster:
+            server: ${K8S_SERVER}
+            certificate-authority: $HOME/.kube/ca.crt
+        contexts:
+        - name: default
+          context:
+            cluster: cluster
+            user: deployer
+        current-context: default
+        users:
+        - name: deployer
+          user:
+            token: ${K8S_TOKEN}
+        EOF
+      shell: bash
+      env:
+        K8S_SERVER: ${{ secrets.K8S_SERVER }}
+        K8S_TOKEN: ${{ secrets.K8S_TOKEN }}
+        K8S_CA: ${{ secrets.K8S_CA }}
 
-      - name: Delete restaurant-landing pod
-        run: kubectl delete pod -l app=restaurant-landing -n default --ignore-not-found=true
+    - name: Delete restaurant-landing pod
+      run: |
+        export KUBECONFIG=$HOME/.kube/config
+        kubectl delete pod -l app=restaurant-landing -n default --ignore-not-found=true
+      shell: bash
