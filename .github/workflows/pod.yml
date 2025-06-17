@@ -1,0 +1,46 @@
+name: Restart Restaurant App
+
+on:
+  push:
+    branches:
+      - master  # or use 'master' if that's your branch
+
+jobs:
+  restart-pod:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'latest'
+
+      - name: Configure Kubeconfig
+        run: |
+          mkdir -p $HOME/.kube
+          echo "$K8S_CA" | base64 -d > $HOME/.kube/ca.crt
+          cat <<EOF > $HOME/.kube/config
+          apiVersion: v1
+          kind: Config
+          clusters:
+          - name: cluster
+            cluster:
+              server: $K8S_SERVER
+              certificate-authority: $HOME/.kube/ca.crt
+          contexts:
+          - name: default
+            context:
+              cluster: cluster
+              user: deployer
+          current-context: default
+          users:
+          - name: deployer
+            user:
+              token: $K8S_TOKEN
+          EOF
+
+      - name: Delete restaurant-landing pod
+        run: kubectl delete pod -l app=restaurant-landing -n default --ignore-not-found=true
