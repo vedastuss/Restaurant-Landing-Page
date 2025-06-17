@@ -1,13 +1,11 @@
-name: Build and push Docker image to dockerhub
+name: Build and Deploy
 
 on:
   push:
     branches: [ "master" ]
-    
+
 jobs:
-
-  build:
-
+  build-and-push:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,15 +14,54 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Login to dockerhub
+    - name: Login to DockerHub
       uses: docker/login-action@v3
       with:
-       username: ${{ secrets.DOCKERHUB_USERNAME }}
-       password: ${{ secrets.DOCKERHUB_TOKEN }}
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    - name: Build and push to dockerhub
+    - name: Build and push Docker image
       uses: docker/build-push-action@v5
       with:
-       context:
-       push: true
-       tags: tyvenchr/restaurant-landing-page:latest
+        context: .
+        push: true
+        tags: tyvenchr/restaurant-landing-page:latest
+
+  delete-pod:
+    runs-on: ubuntu-latest
+    needs: build-and-push  # 👈 ensures it waits for build job to complete
+
+    steps:
+    - name: Set up kubeconfig
+      run: |
+        mkdir -p $HOME/.kube
+        echo "$K8S_CA" | base64 -d > $HOME/.kube/ca.crt
+        cat <<EOF > $HOME/.kube/config
+        apiVersion: v1
+        kind: Config
+        clusters:
+        - name: cluster
+          cluster:
+            server: ${K8S_SERVER}
+            certificate-authority: $HOME/.kube/ca.crt
+        contexts:
+        - name: default
+          context:
+            cluster: cluster
+            user: deployer
+        current-context: default
+        users:
+        - name: deployer
+          user:
+            token: ${K8S_TOKEN}
+        EOF
+      shell: bash
+      env:
+        K8S_SERVER: ${{ secrets.K8S_SERVER }}
+        K8S_TOKEN: ${{ secrets.K8S_TOKEN }}
+        K8S_CA: ${{ secrets.K8S_CA }}
+
+    - name: Delete restaurant-landing pod
+      run: |
+        export KUBECONFIG=$HOME/.kube/config
+        kubectl delete pod -l app=restaurant-landing -n default --ignore-not-found=true
