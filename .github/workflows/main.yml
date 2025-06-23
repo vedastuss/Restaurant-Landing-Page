@@ -3,7 +3,7 @@ name: Build and Deploy
 on:
   push:
     tags:
-      - 'v*'  # Trigger only on version tags like v1.0.1
+      - 'v*'  # Trigger on tags like v1.0.1
 
 jobs:
   build-and-push:
@@ -19,14 +19,19 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+    - name: Set version variables
+      run: |
+        echo "VERSION=${GITHUB_REF_NAME}" >> $GITHUB_ENV
+        echo "VERSION_CLEAN=${GITHUB_REF_NAME#v}" >> $GITHUB_ENV
+
     - name: Build and push Docker image
       uses: docker/build-push-action@v5
       with:
         context: .
         push: true
         tags: |
-          tyvenchr/restaurant-landing-page:${{ github.ref_name }}  # e.g. v1.0.1
-          tyvenchr/restaurant-landing-page:${{ github.ref_name }} | sed 's/^v//'  # e.g. 1.0.1 (optional: cleaner tag)
+          tyvenchr/restaurant-landing-page:${{ env.VERSION }}
+          tyvenchr/restaurant-landing-page:${{ env.VERSION_CLEAN }}
 
 
 
