@@ -25,7 +25,7 @@ jobs:
       with:
         context: .
         push: true
-        tags: tyvenchr/restaurant-landing-page:latest
+        tags: tyvenchr/restaurant-landing-page:${{ env.sha_short }}
 
   # delete-pod:
   #   runs-on: ubuntu-latest
